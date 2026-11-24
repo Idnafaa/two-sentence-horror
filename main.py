@@ -26,9 +26,15 @@ def main():
     text = check(STORY)
     outdir = "/output"
     os.makedirs(outdir, exist_ok=True)
-    with open(os.path.join(outdir, "entry.txt"), "w", encoding="utf-8") as f:
+    path = os.path.join(outdir, "entry.txt")
+    with open(path, "w", encoding="utf-8") as f:
         f.write(text)
-    print(f"wrote {len(text)} chars, 2 sentences, to {outdir}/entry.txt")
+    # Verify the file round-trips: what the judge reads is what we checked.
+    with open(path, encoding="utf-8") as f:
+        written = f.read()
+    assert written == text, "entry.txt differs from the checked story"
+    check(written)
+    print(f"wrote {len(text)} chars, 2 sentences, to {path} (verified)")
 
 
 if __name__ == "__main__":
